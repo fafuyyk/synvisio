@@ -1,7 +1,7 @@
 /*global $*/
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Dashboard } from './components/Dashboard';
+import { Dashboard } from './components';
 import configureStore from './redux/store/configureStore';
 import { Provider } from 'react-redux';
 
@@ -14,7 +14,9 @@ class App extends Component {
 
   render() {
     return (
-      <Provider store={store}> <Dashboard/> </Provider>
+      <Provider store={store}> 
+        <Dashboard/> 
+      </Provider>
     )
   }
 }
