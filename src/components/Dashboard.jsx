@@ -4,7 +4,7 @@ import { hashHistory } from 'react-router';
 import {
     Loader, HiveView, TreeView, PlotCharacteristics,
     SingleLevel, DownloadSvg, CubeView, GeneSearch, SaveModal
-} from '../components';
+} from '.';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -12,34 +12,15 @@ import {
     setGenomicData, setALignmentList, setConfiguration
 } from '../redux/actions/actions';
 
-import { initializeSnapshot, updateSnapshot } from '@kiranbandi/snapshot';
-
 class Dashboard extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         // get the source name based on window query params
         let { sourceID } = this.props.params;
-        const { multiLevel, actions, isSnapShotAvailable } = this.props,
+        const { multiLevel, actions } = this.props,
             { configureSourceID, setLoaderState,
-                setGenomicData, setConfiguration } = actions;
+                setGenomicData } = actions;
 
-        // attach snapshot to the dashboard
-        if (isSnapShotAvailable) {
-            // isAutomaticMode ON or OFF, automatic Timer Interval
-            initializeSnapshot(true, 1000,
-                // Thumbnail Options
-                {
-                    'class': '.snapshot-thumbnail',
-                    'type': 'svg',
-                    'size': { 'width': 235, 'height': 100 }
-                },
-                // Callback function called when a snapshot is recalled
-                (data) => { setConfiguration(data) });
-        }
 
         if (sourceID != 'uploaded-source') {
             // Turn on loader
@@ -70,13 +51,8 @@ class Dashboard extends Component {
 
     render() {
         let { loaderState, configuration, genome = {},
-            isModalVisible, multiLevel, isSnapShotAvailable,
+            isModalVisible, multiLevel,
             multiLevelType, plotType } = this.props;
-
-        // update snapshot
-        if (isSnapShotAvailable) {
-            updateSnapshot(configuration);
-        }
 
         return (
             <div className='dashboard-root m-t'>
