@@ -20,6 +20,7 @@
     "homepage": "https://github.com/kiranbandi/mcscanx-synteny-visualizer#readme",
     "dependencies": {
         "axios": "^0.18.0",
+        "bootstrap-select": "^1.13.18",
         "d3": "^5.5.0",
         "file-saver": "^2.0.2",
         "lodash": "^4.17.10",

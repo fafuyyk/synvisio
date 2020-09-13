@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { Dashboard } from './components';
 import configureStore from './redux/store/configureStore';
 import { Provider } from 'react-redux';
-
 //Root sass file for webpack to compile
 import './sass/main.scss';
 //Initial Default settings 
