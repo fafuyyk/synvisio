@@ -7,7 +7,7 @@ module.exports = {
     entry: ['babel-polyfill', './src/app.jsx'],
     output: {
         path: path.resolve("build/assets/bundle"),
-        filename: "[name].bundle.[chunkhash].js",
+        filename: "bundle.js",
         chunkFilename: "[name].[chunkhash].js"
     },
     plugins: [new webpack.DefinePlugin({

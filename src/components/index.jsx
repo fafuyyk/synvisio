@@ -1,5 +1,3 @@
-export { default as NavBar } from './NavBar';
-export { default as Container } from './Container';
 export { default as Dashboard } from './Dashboard';
 export { default as Loader } from './Loader';
 export { default as InlayIcon } from './InlayIcon';
@@ -12,7 +10,6 @@ export { default as DotView } from './DotView';
 export { default as BlockView } from './BlockView';
 export { default as PanelView } from './PanelView';
 export { default as RadioButton } from './RadioButton';
-export { default as FileUpload } from './FileUpload';
 export { default as HiveView } from './HiveView';
 export { default as TreeView } from './TreeView';
 export { default as CubeView } from './CubeView';
