@@ -14,7 +14,8 @@
     "scripts": {
         "start": "webpack-dev-server --config ./build-config/webpack.config.js --watch-poll",
         "build": "webpack -p --config ./build-config/webpack.prod.config.js",
-        "release": "npm run build && np --any-branch"
+        "release": "npm run build && np --any-branch",
+        "test": "echo \"No test specified\""
     },
     "author": "kiranbandi <bvenkatkiran@gmail.com>",
     "license": "MIT",
