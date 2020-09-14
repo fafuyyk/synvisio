@@ -12,13 +12,22 @@ const store = configureStore();
 class App extends Component {
 
   render() {
+
+    const { inputSource } = this.props,
+      { gffFile, collinearityFile, trackFile } = inputSource;
+
     return (
-      <Provider store={store}> 
-        <Dashboard/> 
+      <Provider store={store}>
+        <Dashboard
+          gffFile={gffFile}
+          collinearityFile={collinearityFile}
+          trackFile={trackFile} />
       </Provider>
     )
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+window.synvisio = function (contentId, gffFile, collinearityFile, trackFile) {
+  ReactDOM.render(<App inputSource={{ gffFile, collinearityFile, trackFile }} />, document.getElementById(contentId));
+}
 

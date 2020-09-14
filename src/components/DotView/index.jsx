@@ -99,7 +99,7 @@ class DotView extends Component {
 
     initialiseLines(configuration, axisLinePositions, chromosomeCollection) {
 
-        const { genomeLibrary } = window.synVisio, linkList = [];
+        const { genomeLibrary } = window.synvisioStore, linkList = [];
 
         _.map(configuration.alignmentList, (alignment) => {
             if (!configuration.isChromosomeModeON || !alignment.hidden) {
@@ -221,7 +221,7 @@ class DotView extends Component {
     render() {
 
         let { configuration, genomeData, isDark, plotType, trackType } = this.props;
-        const trackData = _.filter(window.synVisio.trackData, (d) => !!d),
+        const trackData = _.filter(window.synvisioStore.trackData, (d) => !!d),
             areTracksVisible = this.areTracksVisible(configuration, trackData, plotType),
             side_margin = 40,
             additionalFix = areTracksVisible ? trackData.length * 60 : 10,

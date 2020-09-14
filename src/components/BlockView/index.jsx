@@ -191,7 +191,7 @@ class BlockView extends Component {
         this.leftOffset = Math.max(blockView.width * 0.075, 135);
         this.innerWidth = blockView.width - (2 * this.leftOffset);
 
-        const { genomeLibrary } = window.synVisio;
+        const { genomeLibrary } = window.synvisioStore;
 
 
         const firstLink = alignment.links[0],

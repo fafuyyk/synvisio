@@ -14,16 +14,14 @@ import {
 class Dashboard extends Component {
 
     componentDidMount() {
-        const { multiLevel, actions } = this.props,
-            { configureSourceID, setLoaderState,
-                setGenomicData } = actions;
+        const { actions, gffFile, collinearityFile, trackFile } = this.props,
+            { configureSourceID, setLoaderState, setGenomicData } = actions;
 
-        let sourceID = 'bn';
         // Turn on loader
         setLoaderState(true);
         // update the sourceID set in the state with the new sourceID
-        configureSourceID(sourceID, multiLevel);
-        getGenomicsData(sourceID).then((data) => {
+        configureSourceID();
+        getGenomicsData(gffFile, collinearityFile, trackFile).then((data) => {
             // set the genomic data
             setGenomicData(data);
         }).finally(() => {

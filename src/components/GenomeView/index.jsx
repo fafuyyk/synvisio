@@ -119,7 +119,7 @@ class GenomeView extends Component {
 
             // only process alignments which are not hidden
             if (!configuration.isChromosomeModeON || !alignment.hidden) {
-                const { genomeLibrary } = window.synVisio;
+                const { genomeLibrary } = window.synvisioStore;
 
                 let firstLink = alignment.links[0],
                     lastLink = alignment.links[alignment.links.length - 1];
@@ -275,7 +275,7 @@ class GenomeView extends Component {
             trackType, searchResult } = this.props,
             { isChromosomeModeON = false, genomeView, showScale,
                 markerEdge = 'rounded' } = configuration,
-            trackData = _.filter(window.synVisio.trackData, (d) => !!d),
+            trackData = _.filter(window.synvisioStore.trackData, (d) => !!d),
             areTracksVisible = this.areTracksVisible(configuration, trackData),
             additionalTrackHeight = trackData.length * 120;
 

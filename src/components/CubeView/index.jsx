@@ -58,7 +58,7 @@ class DotView extends Component {
 
     initialiseLines(alignmentList, axisLinePositions, chromosomeCollection) {
 
-        const { genomeLibrary } = window.synVisio, linkList = [];
+        const { genomeLibrary } = window.synvisioStore, linkList = [];
 
         _.map(alignmentList, (alignment) => {
             if (!alignment.hidden) {

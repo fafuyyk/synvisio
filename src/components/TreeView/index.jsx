@@ -91,7 +91,7 @@ class TreeView extends Component {
                 // only process alignments which are not hidden
                 if (!alignment.hidden) {
 
-                    const { genomeLibrary } = window.synVisio;
+                    const { genomeLibrary } = window.synvisioStore;
 
                     let firstLink = alignment.links[0],
                         lastLink = alignment.links[alignment.links.length - 1];

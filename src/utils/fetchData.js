@@ -5,36 +5,28 @@ import toastr from './toastr';
 
 var fetchData = {};
 
-fetchData.getGenomicsData = function(sourceID) {
+fetchData.getGenomicsData = function(gffFile, collinearityFile, trackFile = '') {
 
     return new Promise((resolve, reject) => {
 
         var datastore = {};
 
         // get the coordinate file
-        axios.get('assets/files/' + sourceID + '_coordinate.gff')
+        axios.get(gffFile)
             // process the coordinate file 
             .then((response) => { return processFile(response.data, 'gff') })
             // get the collinear file
             .then((data) => {
                 datastore = Object.assign(datastore, {...data });
-                if (sourceID.indexOf('ortho') > -1) {
-                    return axios.get('assets/files/' + sourceID + '.txt');
-                } else {
-                    return axios.get('assets/files/' + sourceID + '_collinear.collinearity');
-                }
+                return axios.get(collinearityFile);
             })
             // process the collinear file
             .then(((response) => {
-                if (sourceID.indexOf('ortho') > -1) {
-                    return processFile(response.data, 'orthologue');
-                } else {
-                    return processFile(response.data, 'collinear');
-                }
+                return processFile(response.data, 'collinear');
             }))
             // if there is an error in any of the above paths reject the promise and stop the promise chain below too
             .catch((err) => {
-                toastr["error"]("Failed to fetch and parse required files for source - " + sourceID, "ERROR");
+                toastr["error"]("Failed to fetch and parse required input files", "ERROR");
                 reject();
                 return Promise.reject(err);
             })
@@ -42,7 +34,7 @@ fetchData.getGenomicsData = function(sourceID) {
             .then((data) => {
                 datastore = Object.assign({}, datastore, {...data });
                 console.log('Data loading and processing complete...');
-                return axios.get('assets/files/' + sourceID + '_gene_count.txt');
+                return axios.get(trackFile);
             })
             // if the data is not present resolve the promise without the track data
             .then((response) => { return processFile(response.data, 'track') })

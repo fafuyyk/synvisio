@@ -10,7 +10,7 @@ export function setLoaderState(loaderState) {
     return { type: types.SET_LOADER_STATE, loaderState };
 }
 
-export function configureSourceID(sourceID, multiLevel = false) {
+export function configureSourceID(sourceID='', multiLevel = false) {
     return dispatch => {
         dispatch(setSourceID(sourceID));
         //reset configuration
@@ -66,7 +66,7 @@ export function setGenomicData(data) {
     const { genomeLibrary, alignmentList, trackData = false, ...otherData } = data;
     //  Treading Dangerous Territory here by polluting the global name space 
     //  But this reduces the load placed on the redux and react global store
-    window.synVisio = { genomeLibrary, alignmentList, trackData };
+    window.synvisioStore = { genomeLibrary, alignmentList, trackData };
     return { type: types.SET_GENOME_DATA, data: otherData };
 }
 
@@ -171,7 +171,7 @@ export function refineAlignmentListTree(filterLevel, alignmentList) {
 export function filterData(sourceMarkers = [], targetMarkers = [], selectedAlignment = {}, hideUnalignedRegions = false) {
 
     const markers = { 'source': sourceMarkers, 'target': targetMarkers },
-        alignmentList = window.synVisio.alignmentList,
+        alignmentList = window.synvisioStore.alignmentList,
         updatedAlignmentList = processAlignment(markers, alignmentList, selectedAlignment);
 
     if (hideUnalignedRegions) {
@@ -212,11 +212,11 @@ export function findGeneMatch(geneId, cancelMatch = false) {
         if (geneId.length == 0) {
             toastr["error"]("Please enter a gene ID", "ERROR");
         }
-        else if (!window.synVisio.genomeLibrary.get(geneId)) {
+        else if (!window.synvisioStore.genomeLibrary.get(geneId)) {
             toastr["error"]("No gene found for ID - " + geneId, "ERROR");
         }
         else {
-            _.map(window.synVisio.alignmentList, (alignment) => {
+            _.map(window.synvisioStore.alignmentList, (alignment) => {
                 _.map(alignment.links, (o) => {
                     if (o.source == geneId || o.target == geneId) {
                         searchResult.push({ ...alignment, matchingLink: { ...o } });
@@ -237,7 +237,7 @@ export function findGeneMatch(geneId, cancelMatch = false) {
 
 export function hiveFilterData(markers) {
 
-    let alignmentList = window.synVisio.alignmentList,
+    let alignmentList = window.synvisioStore.alignmentList,
         updatedAlignmentList = [],
         noOfMarkers = Object.keys(markers).length;
 
@@ -263,7 +263,7 @@ export function hiveFilterData(markers) {
 
 export function treeFilterData(markers) {
 
-    let alignmentList = window.synVisio.alignmentList,
+    let alignmentList = window.synvisioStore.alignmentList,
         updatedAlignmentList = [],
         noOfMarkers = Object.keys(markers).length;
 

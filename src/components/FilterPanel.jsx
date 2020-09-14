@@ -94,7 +94,7 @@ class FilterPanel extends Component {
         });
 
         // see if track data is available
-        const isTrackDataAvailable = _.reduce(window.synVisio.trackData, (acc, d) => (!!d || acc), false);
+        const isTrackDataAvailable = _.reduce(window.synvisioStore.trackData, (acc, d) => (!!d || acc), false);
 
         return (
             <div id='filter-panel-root' className='container-fluid'>

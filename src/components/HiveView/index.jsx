@@ -82,7 +82,7 @@ class HiveView extends Component {
 
         const { configuration, chromosomeMap } = this.props,
             { selectedMarker = -1 } = configuration.hiveView,
-            { genomeLibrary } = window.synVisio;
+            { genomeLibrary } = window.synvisioStore;
 
         let color;
 
