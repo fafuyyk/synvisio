@@ -1,6 +1,6 @@
 {
     "name": "@kiranbandi/synvisio",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Interactive Multiscale Visualization Tool for Exploring Syteny",
     "main": "build/assets/synvisio.js",
     "keywords": [
