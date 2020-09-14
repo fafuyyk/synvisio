@@ -1,6 +1,6 @@
 {
     "name": "@kiranbandi/synvisio",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "description": "Interactive Multiscale Visualization Tool for Exploring Syteny",
     "main": "dist/synvisio.js",
     "keywords": [
