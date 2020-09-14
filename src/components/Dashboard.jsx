@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { getGenomicsData } from '../utils/fetchData';
 import {
-    Loader, HiveView, TreeView, PlotCharacteristics,
+    HiveView, TreeView, PlotCharacteristics,
     SingleLevel, DownloadSvg, CubeView, GeneSearch, SaveModal
 } from '.';
+import Loader from 'react-loading';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -68,7 +69,7 @@ class Dashboard extends Component {
                             </div>
                             : <h2 className='text-danger text-xs-center m-t-lg'>No data found</h2>}
                     </div>
-                    : <Loader />}
+                    : <Loader className='loading-spinner' type='spin' height='100px' width='100px' color='#d6e5ff' delay={- 1}/>}
             </div>
         );
     }

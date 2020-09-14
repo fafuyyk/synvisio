@@ -67,7 +67,7 @@ class PanelView extends Component {
         let { configuration } = this.props,
             { selectedRadio } = this.state,
             leftWidth = 260,
-            availableWidth = configuration.panelView.width - leftWidth;
+            availableWidth = configuration.panelView.width - leftWidth - 20;
 
         let style = {
             width: (leftWidth / 2) + 'px',

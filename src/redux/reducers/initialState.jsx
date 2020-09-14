@@ -11,7 +11,7 @@ export default {
     searchResult: [],
     multiLevel: false,
     multiLevelType: 'tree',
-    plotType: 'dashboard',
+    plotType: 'linearplot',
     trackType: [{ 'type': 'track-heatmap', 'color': 'red' },
     { 'type': 'track-heatmap', 'color': 'red' },
     { 'type': 'track-heatmap', 'color': 'red' },

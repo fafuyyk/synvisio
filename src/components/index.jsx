@@ -1,5 +1,4 @@
 export { default as Dashboard } from './Dashboard';
-export { default as Loader } from './Loader';
 export { default as InlayIcon } from './InlayIcon';
 export { default as Information } from './Information';
 export { default as FilterPanel } from './FilterPanel';
