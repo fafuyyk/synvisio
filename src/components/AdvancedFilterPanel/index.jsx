@@ -79,7 +79,7 @@ class AdvancedFilterPanel extends Component {
         return (
             <div className='advanced-filter'>
                 <div className={'text-xs-left advanced-filter-head' + (isOpen ? ' bottom-line ' : ' ')} onClick={this.onTabClick}>
-                    {isOpen ? <span className="icon icon-chevron-down"></span> : <span className="icon icon-chevron-right"></span>}
+                    {isOpen ? <span className='synvisio-icon'>&#x21a7;</span> : <span className='synvisio-icon'>&#x21a6;</span>}
                     <span className='epa-label' >Advanced Chromosome Layout Editor </span>
                     <span className={"icon icon-copy"}></span> (Click to open)
                 </div>
@@ -103,10 +103,10 @@ class AdvancedFilterPanel extends Component {
 
                     <div className='button-container'>
                         <button className="btn btn-primary-outline m-r" onClick={this.setMarkerListRedux}>
-                            <span>Update Chromosome Layout</span> <span className="icon icon-check"></span>
+                            <span>Update Chromosome Layout</span>
                         </button>
                         <button className="btn btn-danger-outline" onClick={this.resetMarkers}>
-                            <span>Reset</span> <span className="icon icon-circle-with-cross"></span>
+                            <span>Reset</span>
                         </button>
                     </div>
 

@@ -19,7 +19,7 @@ class DownloadSvg extends Component {
     render() {
         return (
             <div className='download-SVG' onClick={() => { this.props.actions.toggleModalVisbility() }}>
-                <span className='icon-label'>Download Images</span> <span className="icon icon-download"></span>
+                <span className='icon-label'>Download Images</span>
             </div>
         );
     }

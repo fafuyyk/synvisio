@@ -23,8 +23,6 @@ class TreeFilterPanel extends Component {
             $(".tree-select-" + keyIndex)
                 .selectpicker({
                     'actionsBox': true,
-                    'iconBase': 'icon',
-                    'tickIcon': 'icon-check',
                     'selectedTextFormat': 'count > 2'
                 })
                 .selectpicker('val', value);
@@ -140,15 +138,14 @@ class TreeFilterPanel extends Component {
                     </label>
                 </div>
                 <button className="btn btn-primary-outline add-source" onClick={this.onAddSource}>
-                    <span className="icon icon-circle-with-plus"></span>
+                <span className="synvisio-icon m-r-0">&#x2b;</span>
                 </button>
                 <button className="btn btn-primary-outline add-source" onClick={this.onRemoveSource}>
-                    <span className="icon icon-circle-with-minus"></span>
+                <span className="synvisio-icon m-r-0">&#x2212;</span>
                 </button>
                 <button type="submit" className="btn btn-primary-outline" onClick={this.onSubmit}>
-                    GO <span className="icon icon-cw"></span>
+                    Submit 
                 </button>
-
                 <div className='advanced-features'></div>
             </form>
         );

@@ -53,9 +53,9 @@
         margin-left: 10px;
     }
     input {
-        width: 150px;
-        display: inline-block;
-        vertical-align: middle;
+        width: 150px !important;
+        display: inline-block !important;
+        vertical-align: middle !important;
     }
     .small-wrapper-inner-result {
         font-size: 16px;

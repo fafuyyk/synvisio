@@ -39,8 +39,6 @@ class FilterPanel extends Component {
         $('.sourceChromosomeSelect')
             .selectpicker({
                 'actionsBox': true,
-                'iconBase': 'icon',
-                'tickIcon': 'icon-check',
                 'selectedTextFormat': 'count > 2'
             })
             .selectpicker('val', markers.source);
@@ -48,8 +46,6 @@ class FilterPanel extends Component {
         $('.targetChromosomeSelect')
             .selectpicker({
                 'actionsBox': true,
-                'iconBase': 'icon',
-                'tickIcon': 'icon-check',
                 'selectedTextFormat': 'count > 2'
             })
             .selectpicker('val', markers.target);
@@ -143,7 +139,7 @@ class FilterPanel extends Component {
                     </div>
 
                     <button type="submit" className="btn btn-primary-outline" onClick={this.onSubmit}>
-                        GO <span className="icon icon-cw"></span>
+                        Submit
                     </button>
 
                     {isTrackDataAvailable && <button type="submit" id='track-btn' className="btn btn-primary-outline" onClick={this.onToggleTrack}>

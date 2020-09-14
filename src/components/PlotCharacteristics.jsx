@@ -55,9 +55,7 @@ class PlotCharacterisitics extends Component {
             <div className='plot-type-panel'>
 
                 <div className='small-wrapper-header'>
-                    <h4>Chart Configuration
-                        <span className="icon icon-chevron-right"></span>
-                    </h4>
+                    <h4>Chart Configuration</h4>
                 </div>
 
                 <div className='small-wrapper-inner'>

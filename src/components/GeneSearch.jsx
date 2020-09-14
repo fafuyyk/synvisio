@@ -40,15 +40,12 @@ class GeneSearch extends Component {
         return (
             <div>
                 <div className='small-wrapper-header'>
-                    <h4>
-                        Gene Search Panel
-                        <span className="icon icon-chevron-right"></span>
-                    </h4>
+                    <h4> Gene Search Panel </h4>
                 </div>
                 <div className='small-wrapper-inner'>
                     <input id='gene-input-search' className="form-control" type="text" placeholder="Search..." />
                     <button type="submit" className="btn btn-primary-outline" onClick={this.searchForGene}>
-                        SEARCH <span className="icon icon-magnifying-glass"></span>
+                        SEARCH
                     </button>
 
                     <button type="submit" className="btn btn-danger-outline" onClick={this.cancelSearch}>

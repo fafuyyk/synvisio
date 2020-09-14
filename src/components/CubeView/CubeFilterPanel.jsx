@@ -17,8 +17,6 @@ class CubeFilterPanel extends Component {
             $(".hive-select-" + keyIndex)
                 .selectpicker({
                     'actionsBox': true,
-                    'iconBase': 'icon',
-                    'tickIcon': 'icon-check',
                     'selectedTextFormat': 'count > 2'
                 })
                 .selectpicker('val', value);
@@ -78,7 +76,7 @@ class CubeFilterPanel extends Component {
             <form className="filter-panel-hive">
                 {markerFilterElements}
                 <button type="submit" className="btn btn-primary-outline m-l" onClick={this.onSubmit}>
-                    GO <span className="icon icon-cw"></span>
+                    Submit 
                 </button>
             </form>
         );

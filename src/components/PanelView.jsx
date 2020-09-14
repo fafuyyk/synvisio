@@ -184,11 +184,11 @@ class PanelView extends Component {
                             checked={this.state.selectedRadio == key} />
                     })}
                     <button className="btn btn-danger-outline m-t-md" onClick={this.onReset}>
-                        Reset <span className="icon icon-cycle"></span>
+                        Reset 
                     </button>
                     {configuration.isBlockModeON &&
                         <button className="btn btn-danger-outline m-t" onClick={this.onRemoveBlockView}>
-                            Blockview  <span className="icon icon-ccw"></span>
+                            Blockview 
                         </button>}
                 </div>
                 <div className='toggle-container' style={sliderStyle}>
