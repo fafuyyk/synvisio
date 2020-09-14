@@ -2,7 +2,7 @@
     "name": "@kiranbandi/synvisio",
     "version": "2.0.0",
     "description": "Interactive Multiscale Visualization Tool for Exploring Syteny",
-    "main": "build/assets/synvisio.js",
+    "main": "dist/synvisio.js",
     "keywords": [
         "synteny",
         "visualization",

@@ -6,17 +6,17 @@ module.exports = {
     mode: 'development',
     entry: ['babel-polyfill', './src/app.jsx'],
     output: {
-        path: __dirname + '/build/assets',
+        path: __dirname + '/dist',
         filename: "synvisio.js",
-        publicPath: "/assets"
+        publicPath: "/"
     },
     devServer: {
         inline: true,
-        contentBase: './build',
+        contentBase: './dist',
         port: 8080,
         watchOptions: {
             ignored: [
-                path.resolve(__dirname, 'build'),
+                path.resolve(__dirname, 'dist'),
                 path.resolve(__dirname, 'node_modules')
             ]
         }
