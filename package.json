@@ -1,8 +1,8 @@
 {
-    "name": "synvisio",
-    "version": "0.0.1",
+    "name": "@kiranbandi/synvisio",
+    "version": "1.0.0",
     "description": "Interactive Multiscale Visualization Tool for Exploring Syteny",
-    "main": "dist/synvisio.js",
+    "main": "build/assets/synvisio.js",
     "keywords": [
         "synteny",
         "visualization",
@@ -13,9 +13,10 @@
     ],
     "scripts": {
         "start": "webpack-dev-server --config ./build-config/webpack.config.js --watch-poll",
-        "build": "webpack -p --config ./build-config/webpack.prod.config.js"
+        "build": "webpack -p --config ./build-config/webpack.prod.config.js",
+        "release": "npm run build && np --any-branch"
     },
-    "author": "kiranbandi",
+    "author": "kiranbandi <bvenkatkiran@gmail.com>",
     "license": "MIT",
     "homepage": "https://github.com/kiranbandi/mcscanx-synteny-visualizer#readme",
     "dependencies": {
