@@ -9,6 +9,10 @@ import './sass/main.scss';
 //Initial Default settings 
 const store = configureStore();
 
+// load toolkit and boostrap
+import './utils/toolkit';
+import './utils/bootstrapSelect';
+
 class App extends Component {
 
   render() {

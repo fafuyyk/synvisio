@@ -6,8 +6,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
     entry: ['babel-polyfill', './src/app.jsx'],
     output: {
-        path: path.resolve("build/assets/bundle"),
-        filename: "bundle.js",
+        path: path.resolve("build/assets"),
+        filename: "synvisio.js",
         chunkFilename: "[name].[chunkhash].js"
     },
     plugins: [new webpack.DefinePlugin({
