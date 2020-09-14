@@ -1,14 +1,13 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <body>
-    <div id="root"></div>
-    <script type="text/javascript" src="synvisio.js"></script>
+    <div id="panda"></div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@kiranbandi/synvisio@4.0.0"></script>
     <script>
-        synvisio('root',
-            'https://synvisio.github.io/assets/files/bn_coordinate.gff',
-            'https://synvisio.github.io/assets/files/bn_collinear.collinearity',
-            'https://synvisio.github.io/assets/files/bn_gene_count.txt');
+        synvisio('panda',
+            'https://cdn.jsdelivr.net/npm/@kiranbandi/synvisio/dist/data/bn_coordinate.gff',
+            'https://cdn.jsdelivr.net/npm/@kiranbandi/synvisio/dist/data/bn_collinear.collinearity',
+            'https://cdn.jsdelivr.net/npm/@kiranbandi/synvisio/dist/data/bn_gene_count.txt');
     </script>
 </body>
 
