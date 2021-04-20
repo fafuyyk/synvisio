@@ -42,7 +42,7 @@ Then you can also setup the default source and target chromosomes that are pre s
 
 ### 4- Create a build
 
-Once you are done adding all your datasets and setting up the default configurations check to see that the web application is working as expected by navigating to [http://localhost:8080/#/your-unique-identifier-here](http://localhost:8080/#/your-unique-identifier-here). The datasets should load up and if the source and target chromsomes are preset they should be pre selected in the filter panel. 
+Once you are done adding all your datasets and setting up the default configurations check to see that the web application is working as expected by navigating to [http://localhost:8080/#/your-unique-identifier-here](http://localhost:8080/#/your-unique-identifier-here). Again make sure to have your unique identifer in the URL after the last "/". The datasets should load up automatically and if the source and target chromsomes are preset they should be pre selected in the filter panel. 
 
 If everything is working as expected, you are now ready to create a static build. For this run the following command - 
 
