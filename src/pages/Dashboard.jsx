@@ -12,6 +12,9 @@ import {
     setGenomicData, setALignmentList, setConfiguration
 } from '../redux/actions/actions';
 
+
+
+
 class Dashboard extends Component {
 
     constructor(props) {

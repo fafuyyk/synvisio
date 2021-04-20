@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import sampleSourceMapper from '../../utils/sampleSourceMapper';
+import defaultDatasetMap from '../../utils/defaultDatasetMap';
 import processAlignment from '../../utils/filterAlignment';
 import getPlotDimensions from '../../utils/getPlotDimensions';
 import _ from 'lodash';
@@ -22,8 +22,8 @@ export function configureSourceID(sourceID, multiLevel = false, multiGenome = fa
         if (multiGenome) {
             dispatch(setRootMarkers([]));
         }
-        else if (sampleSourceMapper[sourceID]) {
-            const sampleDataMarkers = { ...sampleSourceMapper[sourceID] };
+        else if (defaultDatasetMap[sourceID]) {
+            const sampleDataMarkers = { ...defaultDatasetMap[sourceID] };
             if (multiLevel) {
                 sampleDataMarkers[0] = sampleDataMarkers.source;
                 sampleDataMarkers[1] = sampleDataMarkers.target;

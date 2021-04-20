@@ -1,5 +1,5 @@
 import getPlotDimensions from '../../utils/getPlotDimensions';
-
+import defaultDataSource from '../../utils/defaultDataSource';
 const configuration = getPlotDimensions();
 
 export default {
@@ -7,7 +7,7 @@ export default {
     isDark: true,
     isModalVisible: false,
     isSnapShotAvailable: false,
-    sourceID: 'bn',
+    sourceID: defaultDataSource,
     searchResult: [],
     multiLevel: false,
     multiLevelType: 'tree',
@@ -25,7 +25,7 @@ export default {
       isChromosomeModeON: false,
       showTracks: false,
       isBlockModeON: false,
-      'markers': { 'source': [], 'target': [] }, // default preset markers are loaded from the sampleSourceMapper
+      'markers': { 'source': [], 'target': [] }, // default preset markers are loaded from the defaultDatasetMap
       'reversedMarkers': { 'source': [], 'target': [] },//same structure but array contains the marker that is reversed
       'alignmentList': [],
       'filterLevel': {}

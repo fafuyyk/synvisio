@@ -1,6 +1,5 @@
 /*global $*/
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { toggleTheme } from '../../redux/actions/actions';
@@ -24,7 +23,7 @@ class NavBar extends Component {
 
     render() {
 
-        const { isDark, sourceID } = this.props;
+        const { isDark } = this.props;
         return (
             <nav className="navbar navbar-inverse navbar-fixed-top">
                 <div className="container-fluid">
@@ -35,32 +34,15 @@ class NavBar extends Component {
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <Link data-toggle="collapse" data-target="#navbar" className="navbar-brand navbar-brand-emphasized" to='/'>
-                            <span className="icon icon-home navbar-brand-icon"></span> Home
-                            </Link>
+                        <a data-toggle="collapse" data-target="#navbar" className="navbar-brand navbar-brand-emphasized">
+                            SynVisio </a>
                     </div>
                     <div id="navbar" className="navbar-collapse collapse ">
-
-                        <ul className='nav navbar-nav'>
-                            <li>
-                                <Link to={'/dashboard/' + sourceID}>
-                                    <span className="icon icon-line-graph"></span> SYNTENY Dashboard
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/upload'>
-                                    <span className="icon icon-publish"></span> Upload OWN Data to Dashboard
-                                </Link>
-                            </li>
-                        </ul>
-
                         <ul className='nav navbar-nav pull-right' onClick={this.props.toggleTheme}>
                             <li>
                                 <span className={"icon icon-light-" + (isDark ? "down" : "up")}></span> Switch Chart Background to {isDark ? 'Light' : 'Dark'} Theme
                             </li>
                         </ul>
-
-
                     </div>
                 </div>
             </nav>
@@ -68,7 +50,7 @@ class NavBar extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
         sourceID: state.oracle.sourceID,
         isDark: state.oracle.isDark
