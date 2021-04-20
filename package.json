@@ -12,8 +12,8 @@
         "d3"
     ],
     "scripts": {
-        "start": "webpack-dev-server --config ./build-config/webpack.config.js",
-        "build": "webpack -p --config ./build-config/webpack.prod.config.js",
+        "start": "webpack --serve --config ./build-config/webpack.config.js",
+        "build": "webpack --config ./build-config/webpack.prod.config.js",
         "clean": "rimraf build/assets/bundle/*",
         "deploy": "npm run clean && npm run build && npm run deploy-gh",
         "deploy-gh": "gh-pages -d build"
@@ -43,7 +43,6 @@
         "react-redux": "^5.0.7",
         "react-router": "^3.0.5",
         "react-transition-group": "^4.4.1",
-        "react-youtube": "^7.8.0",
         "redux": "^4.0.0",
         "redux-thunk": "^2.3.0",
         "save-svg-as-png": "^1.4.17",
@@ -60,23 +59,22 @@
         "babel-preset-env": "^1.7.0",
         "babel-preset-react": "^6.16.0",
         "babel-preset-stage-0": "^6.22.0",
-        "css-loader": "^0.28.11",
+        "css-loader": "^5.2.4",
         "file-loader": "^1.1.11",
         "gh-pages": "^1.2.0",
         "html-webpack-harddisk-plugin": "^1.0.1",
         "html-webpack-plugin": "^3.2.0",
-        "image-webpack-loader": "^3.2.0",
+        "image-webpack-loader": "^7.0.1",
         "redux-devtools-extension": "^2.13.2",
-        "resolve-url-loader": "^2.3.0",
+        "resolve-url-loader": "^3.1.2",
         "rimraf": "^3.0.2",
         "sass-loader": "^7.0.3",
         "style-loader": "^0.21.0",
         "terser-webpack-plugin": "^3.0.7",
         "uglify-js": "^3.6.0",
         "url-loader": "^1.0.1",
-        "webpack": "^4.12.0",
+        "webpack": "^5.34.0",
         "webpack-cli": "^3.0.7",
-        "webpack-dev-server": "^3.1.4",
         "workerize-loader": "^1.0.4"
     }
 }
