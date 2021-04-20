@@ -7,7 +7,9 @@ SynVisio is a single page react web application and so can be hosted as a simple
 To get started make sure you have NodeJS installed. Then clone the main synvisio github repository and checkout the **self-hosted-module** branch.
 
 `git clone https://github.com/kiranbandi/synvisio.git`
+
 `cd synvisio`
+
 `git checkout self-hosted-module`
 
 Then install the required npm packages - 
