@@ -14,7 +14,7 @@ To get started make sure you have NodeJS installed. Then clone the main synvisio
 
 Then install the required npm packages - 
 
-`npm run install`
+`npm install`
 
 After this you can start the local server to test the system locally first - 
 
