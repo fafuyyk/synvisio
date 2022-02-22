@@ -34,12 +34,6 @@ class LinkageMap extends Component {
 
             let dataKey = 'newReferenceMap';
 
-            if (sourceID == 'old') {
-                dataKey = 'oldReferenceMap';
-            }
-            else if (sourceID == 'lr29') {
-                dataKey = 'twentynineReferenceMap'
-            }
             let linkageRawData = linkageMapData[dataKey];
 
             linkageData = linkageRawData.split('\n').filter((d) => d.length > 0).map((d) => d.trim().split(',')).map((e) => ({
@@ -116,6 +110,8 @@ class LinkageMap extends Component {
             });
 
             const trackStore = { 'chromosomeMap': groupedByLinkageID, 'min': trackMin.score, 'max': trackMax.score };
+
+            debugger;
 
             // set the genomic data
             setGenomicData({ ...data, chromosomeMap, genomeLibrary, 'trackData': [trackStore] });

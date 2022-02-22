@@ -2,10 +2,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import {
-  NotFound, Home, Dashboard, LinkageMap,
-  Upload, PyadhoreProcessor, MultiGenome, MultiHive
-} from './pages';
+import { NotFound, Home, LinkageMap, Upload } from './pages';
 import { Container } from './components';
 import configureStore from './redux/store/configureStore';
 import { Provider } from 'react-redux';
@@ -33,12 +30,8 @@ class App extends Component {
         <Router history={hashHistory}>
           <Route path='/' component={Container}>
             <IndexRoute component={Home} />
-            <Route path='dashboard(/:sourceID)' component={Dashboard} />
+            <Route path='dashboard(/:sourceID)' component={LinkageMap} />
             <Route path='upload' component={Upload} />
-            <Route path='pyadhore-processor' component={PyadhoreProcessor} />
-            <Route path='multi-genome(/:sourceID)' component={MultiGenome} />
-            <Route path='multi-hive(/:sourceID)' component={MultiHive} />
-            <Route path='linkage-map(/:sourceID)' component={LinkageMap} />
             <Route path='*' component={NotFound} />
           </Route>
         </Router>

@@ -192,17 +192,7 @@ class LinkageView extends Component {
             additionalTrackHeight = trackData.length * 140;
 
 
-        if (sourceID == 'new') {
-            configuration.markers = { 'source': ['lc1', 'lc5', 'lc2', 'lc3', 'lc4', 'lc6', 'lc7'], 'target': ['LG1', 'LG5', 'LG2', 'LG3', 'LG4', 'LG6', 'LG7'] };
-        }
-        else if (sourceID == 'old') {
-            configuration.markers = { 'source': ['lc1', 'lc5', 'lc2', 'lc3', 'lc4', 'lc6', 'lc7'], 'target': ['LG1', 'LG5.1', 'LG5.2', 'LG2', 'LG3', 'LG4', 'LG6', 'LG7'] };
-        }
-        else if (sourceID == 'lr29') {
-            configuration.markers = { 'source': ['lc1', 'lc5', 'lc2', 'lc3', 'lc4', 'lc6', 'lc7'], 'target': ['LG0', 'LG14', 'LG6', 'LG11','LG15','LG3'] };
-            areTracksVisible = false;
-        }
-
+        configuration.markers = { 'source': ['lc1', 'lc5', 'lc2', 'lc3', 'lc4', 'lc6', 'lc7'], 'target': ['LG1', 'LG5', 'LG2', 'LG3', 'LG4', 'LG6', 'LG7'] };
 
         configuration.isNormalized = true;
 
@@ -219,8 +209,8 @@ class LinkageView extends Component {
             distMax = trackData[0].max,
             distMin = trackData[0].min;
 
-            console.log(hetMax,hetMin)
-            console.log(distMax,distMin)
+        console.log(hetMax, hetMin)
+        console.log(distMax, distMin)
 
         return (
             <div className='genomeViewRoot' style={{ marginTop: '-35px' }}>
