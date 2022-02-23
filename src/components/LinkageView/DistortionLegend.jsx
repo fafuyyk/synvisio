@@ -41,7 +41,7 @@ export default class Legend extends Component {
             .shapePadding(0)
             .cells(20)
             .orient("horizontal")
-            .title("% Eston")
+            .title("Distortion")
             .titleWidth(500)
             .labels(e => (e['i'] == 0 ? 'Low' : e['i'] == 19 ? 'High' : ''))
             .scale(sequentialScale)

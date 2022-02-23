@@ -40,7 +40,6 @@ export default (markers, alignmentList, selectedAlignment = {}) => {
             // if the alignment is from target to source we flip the alignment  
             if ((sourceKeyList.indexOf(target) > -1) && (targetKeyList.indexOf(source) > -1)) {
 
-
                 // mulitple single level checks
                 if (selectedAlignment.source) {
                     if ((selectedAlignment.source == source && selectedAlignment.target == target) || (selectedAlignment.target == source && selectedAlignment.source == target)) {
@@ -50,8 +49,6 @@ export default (markers, alignmentList, selectedAlignment = {}) => {
                         }
                     }
                 }
-
-
 
                 let flippedAlignment = _.clone(alignment);
 

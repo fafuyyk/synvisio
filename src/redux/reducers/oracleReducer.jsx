@@ -46,6 +46,8 @@ export default function oracleReducer(state = initialState.oracle, action) {
       return Object.assign({}, state, { configuration: { ...state.configuration, markers: action.markers, reversedMarkers: action.reversedMarkers } })
     case types.SET_ALIGNMENT_LIST:
       return Object.assign({}, state, { configuration: { ...state.configuration, alignmentList: action.alignmentList } })
+    case types.SET_LINKAGE_LIST:
+      return Object.assign({}, state, { configuration: { ...state.configuration, linkageList: action.linkageList } })
     case types.SET_FILTER_LEVEL:
       return Object.assign({}, state, { configuration: { ...state.configuration, filterLevel: action.filterLevel } })
     case types.SET_HIVE_VIEW_SELECTED:

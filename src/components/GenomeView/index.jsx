@@ -77,7 +77,7 @@ class GenomeView extends Component {
 
         // no we initialise the markers and set the width directly on the markers lists directly 
         let markers = {};
-        _.each(configuration.markers, (chromosomeList, markerId) => {
+        _.each(configuration.nonLinkageMarkers, (chromosomeList, markerId) => {
 
             if (isNormalized) {
                 // find the marker list that has the maximum width
@@ -213,90 +213,21 @@ class GenomeView extends Component {
         return linkList;
     }
 
-    initialiseTracks(markerPositions, trackType, trackData, showScale) {
-
-        return _.map(trackData, (singleTrackData, trackIndex) => {
-
-            let trackPositions = {}, trackValue;
-
-            _.each(markerPositions, (markerList, markerListId) => {
-
-                let yShifter = (50 * (trackIndex + 1)),
-                    interTrackGap = 20 * (trackIndex),
-                    interScaleShifter = showScale ? 50 + interTrackGap : 20 + interTrackGap,
-                    multiplier = markerListId == 'source' ? -1 * (yShifter + interScaleShifter) : (yShifter - 50 + interScaleShifter);
-                _.each(markerList, (marker) => {
-                    let tracksPerMarker = _.map(singleTrackData.chromosomeMap[marker.key], (trackDataFragment) => {
-                        trackValue = (trackDataFragment.value - singleTrackData.min) / (singleTrackData.max - singleTrackData.min);
-                        return {
-                            x: ((trackDataFragment.start / marker.data.width) * marker.dx) + marker.x,
-                            dx: ((trackDataFragment.end - trackDataFragment.start) / marker.data.width) * marker.dx,
-                            dy: (trackType[trackIndex].type == 'track-heatmap') ? 50 : 50 * trackValue,
-                            y: marker.y + (multiplier) + ((trackType[trackIndex].type == 'track-heatmap') ? 0 : (50 * (1 - trackValue))),
-                            value: trackValue,
-                            trackKey: marker.key
-                        }
-                    });
-                    trackPositions[marker.key + '-' + markerListId] = tracksPerMarker;
-                });
-            });
-            return trackPositions;
-        })
-    }
-
-    initialiseTrackTrails(markerPositions, trackType, trackData, showScale) {
-
-
-        return _.map(trackData, (ignoreProp, trackIndex) => {
-
-            let trackTrailPostions = [];
-            // For heatmap style tracks we dont have y axis trails 
-            if (trackType[trackIndex].type == 'track-heatmap') { return false }
-            // The track height is hardcoded to 50px so the lines are at 10 ,20,30,40 and 50px respectively 
-            else {
-                _.each(markerPositions, (markerList, markerListId) => {
-
-                    let yShifter = (50 * (trackIndex + 1)),
-                        interTrackGap = 20 * (trackIndex),
-                        interScaleShifter = showScale ? 50 + interTrackGap : 20 + interTrackGap,
-                        multiplier = markerListId == 'source' ? -1 * (yShifter + interScaleShifter) : (yShifter - 50 + interScaleShifter);
-
-                    _.each(markerList, (marker) => {
-                        for (let looper = 0; looper <= 5; looper++) {
-                            trackTrailPostions.push({
-                                x: marker.x,
-                                dx: marker.dx,
-                                y: marker.y + multiplier + (looper * 10)
-                            });
-                        }
-                    });
-                });
-                return trackTrailPostions;
-            }
-        });
-    }
-
-    areTracksVisible(configuration, trackData) {
-        return (_.reduce(trackData, (acc, d) => (!!d || acc), false) && configuration.showTracks);
-    }
 
     render() {
 
-        const { configuration, genomeData, isDark,
-            trackType, searchResult, sourceID } = this.props,
-            { isChromosomeModeON = false, genomeView, showScale,
-                markerEdge = 'rounded' } = configuration,
-            trackData = _.filter(window.synVisio.trackData, (d) => !!d),
-            areTracksVisible = this.areTracksVisible(configuration, trackData),
-            additionalTrackHeight = trackData.length * 140;
+        const { configuration, genomeData, isDark, searchResult, sourceID } = this.props,
+            { isChromosomeModeON = false, genomeView,
+                markerEdge = 'rounded' } = configuration;
 
-        const markerPositions = this.initialiseMarkers(configuration, genomeData.chromosomeMap, areTracksVisible, additionalTrackHeight),
-            linkPositions = this.initialiseLinks(configuration, genomeData.chromosomeMap, markerPositions, searchResult, sourceID),
-            trackPositions = areTracksVisible ? this.initialiseTracks(markerPositions, trackType, trackData, showScale) : false,
-            trackTrailPositions = areTracksVisible ? this.initialiseTrackTrails(markerPositions, trackType, trackData, showScale) : false;
+        const { source = [], target = [] } = configuration.markers;
 
-        const trackHeightFix = areTracksVisible ? (trackData.length * 12) : 0;
-        const height = genomeView.height - trackHeightFix + (areTracksVisible ? (additionalTrackHeight + (showScale ? 45 : 20)) : 0);
+        configuration.nonLinkageMarkers = { 'source': [...source], 'target': [...target] };
+
+        const markerPositions = this.initialiseMarkers(configuration, genomeData.chromosomeMap, false, 0),
+            linkPositions = this.initialiseLinks(configuration, genomeData.chromosomeMap, markerPositions, searchResult, sourceID);
+
+        const height = genomeView.height;
 
         return (
             <div className='genomeViewRoot' >
@@ -311,18 +242,8 @@ class GenomeView extends Component {
                     className={'genomeViewSVG exportable-svg snapshot-thumbnail  ' + (isChromosomeModeON ? 'chrom-mode ' : '') + (markerEdge == 'square' ? 'remove-cap' : '')}
                     ref={node => this.outerG = node} height={height} width={genomeView.width}>
                     <g ref={node => this.innerG = node} >
-                        <Markers areTracksVisible={areTracksVisible} isDark={isDark} configuration={configuration} markerPositions={markerPositions} />
+                        <Markers areTracksVisible={false} isDark={isDark} configuration={configuration} markerPositions={markerPositions} />
                         <Links isDark={isDark} configuration={configuration} linkPositions={linkPositions} />
-                        {areTracksVisible &&
-                            _.map(trackPositions, (trackPos, index) =>
-                                <Tracks key={'track-sub-' + index}
-                                    trackPositions={trackPos}
-                                    colorScale={trackType[index].color}
-                                    trackType={trackType[index].type} />)}
-                        {areTracksVisible &&
-                            _.map(trackTrailPositions, (trackTrailPos, index) =>
-                                <TrackTrails key={'track-trail-' + index}
-                                    trackTrailPositions={trackTrailPos} />)}
                     </g>
                 </svg>
             </div >

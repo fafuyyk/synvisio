@@ -1,6 +1,7 @@
 import * as types from './actionTypes';
 import sampleSourceMapper from '../../utils/sampleSourceMapper';
 import processAlignment from '../../utils/filterAlignment';
+import processLinkage from '../../utils/filterLinkageList';
 import getPlotDimensions from '../../utils/getPlotDimensions';
 import _ from 'lodash';
 import toastr from '../../utils/toastr';
@@ -9,36 +10,22 @@ export function setLoaderState(loaderState) {
     return { type: types.SET_LOADER_STATE, loaderState };
 }
 
-export function configureSourceID(sourceID, multiLevel = false, multiGenome = false) {
+export function configureSourceID(sourceID) {
     return dispatch => {
         dispatch(setSourceID(sourceID));
-        dispatch({ type: types.SET_PLOT_LEVEL, 'value': multiLevel })
         //reset configuration
         dispatch(setFilterLevel({}));
         dispatch(setchromosomeMode(false));
         dispatch(setBlockMode(false));
 
-        // TODO For multi genome mode, we just use an empty root marker for now
-        if (multiGenome) {
-            dispatch(setRootMarkers([]));
-        }
-        else if (sampleSourceMapper[sourceID]) {
+        console.log(sourceID)
+
+        if (sampleSourceMapper[sourceID]) {
             const sampleDataMarkers = { ...sampleSourceMapper[sourceID] };
-            if (multiLevel) {
-                sampleDataMarkers[0] = sampleDataMarkers.source;
-                sampleDataMarkers[1] = sampleDataMarkers.target;
-                delete sampleDataMarkers.source;
-                delete sampleDataMarkers.target;
-            }
             dispatch(setRootMarkers(sampleDataMarkers));
-        }
-        else {
-            dispatch(setRootMarkers(multiLevel ? {} : { 'source': [], 'target': [] }));
         }
     }
 }
-
-
 
 export function setchromosomeMode(isChromosomeModeON) {
     return { type: types.SET_CHROMOSOME_MODE, isChromosomeModeON };
@@ -70,10 +57,10 @@ export function toggleModalVisbility() {
 
 
 export function setGenomicData(data) {
-    const { genomeLibrary, alignmentList, trackData = false, ...otherData } = data;
+    const { genomeLibrary, alignmentList, linkageList = [], trackData = false, ...otherData } = data;
     //  Treading Dangerous Territory here by polluting the global name space 
     //  But this reduces the load placed on the redux and react global store
-    window.synVisio = { genomeLibrary, alignmentList, trackData };
+    window.synVisio = { genomeLibrary, alignmentList, linkageList, trackData };
     return { type: types.SET_GENOME_DATA, data: otherData };
 }
 
@@ -94,6 +81,10 @@ export function setRootMarkers(markers, reversedMarkers = false) {
 
 export function setALignmentList(alignmentList) {
     return { type: types.SET_ALIGNMENT_LIST, alignmentList };
+}
+
+export function setLinkageList(linkageList) {
+    return { type: types.SET_LINKAGE_LIST, linkageList };
 }
 
 export function toggleTracks() {
@@ -140,134 +131,22 @@ export function refineAlignmentList(filterLevel, alignmentList) {
     };
 }
 
-export function refineAlignmentListTree(filterLevel, alignmentList) {
 
-    let updatedAlignmentList = _.map(alignmentList, (internalList) => {
-
-        const internalFilterLevel = filterLevel[internalList.source];
-
-
-        let internalListModified;
-
-        if (internalFilterLevel && (internalFilterLevel.source || internalFilterLevel.target)) {
-            internalListModified = _.map(internalList.alignmentList, (o) => {
-
-                if (internalFilterLevel.source && o.source != internalFilterLevel.source) {
-                    o.hidden = true;
-                }
-                else if (internalFilterLevel.target && o.target != internalFilterLevel.target) {
-                    o.hidden = true;
-                }
-                else {
-                    o.hidden = false;
-                }
-                return o;
-            });
-            internalList.alignmentList = internalListModified;
-        }
-        return internalList;
-    });
-
-    return dispatch => {
-        dispatch(setFilterLevel(filterLevel));
-        dispatch(setALignmentList(updatedAlignmentList));
-    };
-}
-
-
-export function filterMultiGenomeData(markers, plotType = 'multi-genome') {
-
-    const markerGroupList = _.groupBy(markers, (d) => d.slice(0, 2)),
-        alignmentList = window.synVisio.alignmentList;
-
-    let alignmentMatrix = [], markerList = [];
-
-    if (plotType == 'multi-hive') {
-
-        var metaMarkerList = [['as', 'cs', 'jl'], ['cs', 'jl', 'lm'], ['lm', 'as', 'cs'], ['lm', 'as', 'jl']];
-        var subGenomes = ['A', 'B', 'D'];
-
-        var markerStore = {};
-        // group wheat data by subgenome
-        _.map(markerGroupList, (e, index) => {
-            markerStore[index] = _.groupBy(e, (d) => d[3]);
-        });
-
-
-        _.map(subGenomes, (subGenome) => {
-            _.map(metaMarkerList, (metaList) => {
-                var markers = [markerStore[metaList[0]][subGenome], markerStore[metaList[1]][subGenome], markerStore[metaList[2]][subGenome]]
-                markerList.push(markers);
-            });
-        });
-
-
-
-
-        _.map(markerList, (markers) => {
-
-            let noOfMarkers = markers.length;
-
-            let updatedAlignmentList = [];
-            _.each(markers, (value, keyIndex) => {
-                const nextIndex = ((noOfMarkers - 1) == keyIndex) ? 0 : (Number(keyIndex) + 1),
-                    tempMarkers = { 'source': markers[keyIndex], 'target': markers[nextIndex] };
-                updatedAlignmentList.push({ source: keyIndex, target: nextIndex, 'alignmentList': processAlignment(tempMarkers, alignmentList) });
-            });
-            alignmentMatrix.push(updatedAlignmentList);
-        });
-
-    }
-    else {
-
-        _.map(markerGroupList, (source) => {
-            _.map(markerGroupList, (target) => {
-                const markers = { 'source': _.sortBy(source), 'target': _.sortBy(target) };
-                markerList.push(markers);
-                alignmentMatrix.push(processAlignment(markers, alignmentList));
-            });
-        });
-
-    }
-
-    return dispatch => {
-        dispatch(setRootMarkers(markerList));
-        dispatch(setALignmentList(alignmentMatrix));
-    };
-
-
-
-}
-
-
-export function filterData(sourceMarkers = [], targetMarkers = [], selectedAlignment = {}, hideUnalignedRegions = false) {
+export function filterData(sourceMarkers = [], targetMarkers = [], linkageMarkers = []) {
 
     const markers = { 'source': sourceMarkers, 'target': targetMarkers },
+        linkageSet = { 'source': targetMarkers, 'target': linkageMarkers },
         alignmentList = window.synVisio.alignmentList,
-        updatedAlignmentList = processAlignment(markers, alignmentList, selectedAlignment);
-
-    if (hideUnalignedRegions) {
-        // get the unique list of IDs of all chromosomes or scaffolds that have alignments mapped to them
-        let uniqueIDList = [];
-        updatedAlignmentList.map((d) => { uniqueIDList.push(d.source, d.target) });
-        uniqueIDList = _.uniq(uniqueIDList);
-
-        markers.source = _.filter(markers.source, (d) => uniqueIDList.indexOf(d) > -1);
-        markers.target = _.filter(markers.target, (d) => uniqueIDList.indexOf(d) > -1);
-    }
+        linkageList = window.synVisio.linkageList,
+        updatedAlignmentList = processAlignment(markers, alignmentList),
+        updatedLinkageList = processLinkage(linkageSet, linkageList);
 
     return dispatch => {
-        let filterLevel = {}, isChromosomeModeON = false;
-        // when only one marker is selected in source and target , directly enter chromosome mode
-        if (markers.source.length == 1 && markers.target.length == 1) {
-            filterLevel = { source: markers.source[0], target: markers.target[0] };
-            isChromosomeModeON = true;
-        };
-        dispatch(setRootMarkers(markers));
+        let filterLevel = {};
+        dispatch(setRootMarkers({ 'source': sourceMarkers, 'target': targetMarkers, 'linkage': linkageMarkers }));
         dispatch(setFilterLevel(filterLevel));
-        dispatch(setchromosomeMode(isChromosomeModeON));
-        dispatch(setBlockMode(false));
         dispatch(setALignmentList(updatedAlignmentList));
+        dispatch(setLinkageList(updatedLinkageList));
     };
 }
 

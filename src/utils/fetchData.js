@@ -5,7 +5,7 @@ import toastr from './toastr';
 
 var fetchData = {};
 
-fetchData.getGenomicsData = function(sourceID) {
+fetchData.getGenomicsData = function (sourceID) {
 
     return new Promise((resolve, reject) => {
 
@@ -17,20 +17,12 @@ fetchData.getGenomicsData = function(sourceID) {
             .then((response) => { return processFile(response.data, 'gff') })
             // get the collinear file
             .then((data) => {
-                datastore = Object.assign(datastore, {...data });
-                if (sourceID.indexOf('ortho') > -1) {
-                    return axios.get('assets/files/' + sourceID + '.txt');
-                } else {
-                    return axios.get('assets/files/' + sourceID + '_collinear.collinearity');
-                }
+                datastore = Object.assign(datastore, { ...data });
+                return axios.get('assets/files/' + sourceID + '_collinear.collinearity');
             })
             // process the collinear file
             .then(((response) => {
-                if (sourceID.indexOf('ortho') > -1) {
-                    return processFile(response.data, 'orthologue');
-                } else {
-                    return processFile(response.data, 'collinear');
-                }
+                return processFile(response.data, 'collinear');
             }))
             // if there is an error in any of the above paths reject the promise and stop the promise chain below too
             .catch((err) => {
@@ -38,16 +30,26 @@ fetchData.getGenomicsData = function(sourceID) {
                 reject();
                 return Promise.reject(err);
             })
-            // if everything above was successful try to load the track data
+            // if everything above was successful try to load the linkage data
             .then((data) => {
-                datastore = Object.assign({}, datastore, {...data });
-                console.log('Data loading and processing complete...');
-                return axios.get('assets/files/' + sourceID + '_gene_count.txt');
+                datastore = Object.assign({}, datastore, { ...data });
+                console.log('Synteny data loading and processing complete...');
+                return axios.get('assets/files/' + sourceID + '_linkage.txt');
             })
             // if the data is not present resolve the promise without the track data
-            .then((response) => { return processFile(response.data, 'track') })
-            .then((trackData) => { resolve({...datastore, trackData: [trackData] }); })
-            .catch(() => { resolve({...datastore, trackData: [false] }); })
+            .then((response) => { return processFile(response.data, 'linkage') })
+            .then((data) => {
+
+                const { newMap, newLibrary, linkageList, trackData } = data,
+                    { chromosomeMap, genomeLibrary } = datastore;
+
+                datastore.chromosomeMap = new Map([...chromosomeMap, ...newMap]);
+                datastore.genomeLibrary = new Map([...genomeLibrary, ...newLibrary]);
+
+                datastore = Object.assign({}, datastore, { linkageList });
+                resolve({ ...datastore, trackData });
+            })
+            .catch(() => { resolve({ ...datastore, trackData: [false] }); })
     });
 }
 

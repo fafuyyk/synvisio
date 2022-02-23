@@ -1,10 +1,9 @@
 import gffWorker from "../workers/gff.worker";
 import collinearWorker from "../workers/collinear.worker";
-import trackWorker from "../workers/track.worker";
-import orthologueWorker from "../workers/orthologue.worker";
+import linkageWorker from "../workers/linkage.worker";
 import toastr from './toastr';
 
-export default function(rawData, typeOfFile, additionalParams = {}) {
+export default function (rawData, typeOfFile, additionalParams = {}) {
     return new Promise((resolve, reject) => {
         var instance;
         switch (typeOfFile) {
@@ -14,11 +13,8 @@ export default function(rawData, typeOfFile, additionalParams = {}) {
             case 'collinear':
                 instance = collinearWorker();
                 break;
-            case 'track':
-                instance = trackWorker();
-                break;
-            case 'orthologue':
-                instance = orthologueWorker();
+            case 'linkage':
+                instance = linkageWorker();
         }
         instance.process(rawData, additionalParams).catch(() => {
             toastr["error"]("Error in parsing the " + typeOfFile + " File", "ERROR");

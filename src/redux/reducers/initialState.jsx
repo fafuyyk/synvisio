@@ -4,10 +4,10 @@ const configuration = getPlotDimensions();
 
 export default {
   oracle: {
-    isDark: true,
+    isDark: false,
     isModalVisible: false,
     isSnapShotAvailable: false,
-    sourceID: 'bn',
+    sourceID: 'lentils_lg',
     searchResult: [],
     multiLevel: false,
     multiLevelType: 'tree',
@@ -19,10 +19,10 @@ export default {
     loaderState: false,
     configuration: {
       ...configuration,
-      showScale: true,
+      showScale: false,
       markerEdge: 'rounded', // rounded or square
       alignmentColor: 'tenColor', // tenColor or orientation
-      markerAlternateColor: true,
+      markerAlternateColor: false,
       isChromosomeModeON: false,
       showTracks: false,
       isBlockModeON: false,

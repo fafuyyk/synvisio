@@ -34,7 +34,7 @@ class FilterPanel extends Component {
     }
 
     componentDidMount() {
-        const { markers = { 'source': [], 'target': [] } } = this.props;
+        const { markers = { 'source': [], 'target': [], 'linkage': [] } } = this.props;
 
         $('.sourceChromosomeSelect')
             .selectpicker({
@@ -53,25 +53,37 @@ class FilterPanel extends Component {
                 'selectedTextFormat': 'count > 2'
             })
             .selectpicker('val', markers.target);
+
+
+        $('.linkageChromosomeSelect')
+            .selectpicker({
+                'actionsBox': true,
+                'iconBase': 'icon',
+                'tickIcon': 'icon-check',
+                'selectedTextFormat': 'count > 2'
+            })
+            .selectpicker('val', markers.linkage);
     }
 
     componentDidUpdate() {
         const { markers = { 'source': [], 'target': [] } } = this.props;
         $('.sourceChromosomeSelect').selectpicker('refresh').selectpicker('val', markers.source);
         $('.targetChromosomeSelect').selectpicker('refresh').selectpicker('val', markers.target);
+        $('.linkageChromosomeSelect').selectpicker('refresh').selectpicker('val', markers.linkage);
     }
 
     componentWillUnmount() {
         $('.sourceChromosomeSelect').selectpicker('destroy');
         $('.targetChromosomeSelect').selectpicker('destroy');
+        $('.linkageChromosomeSelect').selectpicker('destroy');
     }
     onSubmit(e) {
         e.preventDefault();
         const sourceMarkers = $('.sourceChromosomeSelect').selectpicker('val'),
             targetMarkers = $('.targetChromosomeSelect').selectpicker('val'),
-            { hideUnalignedRegions } = this.state;
+            linkageMarkers = $('.linkageChromosomeSelect').selectpicker('val');
         //  if markers lists are null set them to empty lists
-        this.props.filterData(!!sourceMarkers ? sourceMarkers : [], !!targetMarkers ? targetMarkers : [], {}, hideUnalignedRegions);
+        this.props.filterData(!!sourceMarkers ? sourceMarkers : [], !!targetMarkers ? targetMarkers : [], !!linkageMarkers ? linkageMarkers : [], {}, false);
     }
 
     onToggleTrack(e) {
@@ -81,75 +93,55 @@ class FilterPanel extends Component {
 
     render() {
 
-        let { chromosomeMap = {}, isNormalized = false, showScale = true, plotType } = this.props,
-            { hideUnalignedRegions } = this.state,
-            // sort chromosome map 
-            // Zero is passed to the sorting function so that sorting happens based on the 0th value
-            //  which is the actual chromosome identifier
-            chromosomeMapList = [...chromosomeMap].sort(sortAlphaNum(0));
+        let { chromosomeMap = {}, isNormalized = false, plotType } = this.props;
+
+        const [chromosomeOptions, linkageOptions] = _.partition([...chromosomeMap], ([e, value]) => e.indexOf('LG') == -1);
+
+        // sort chromosome map 
+        // Zero is passed to the sorting function so that sorting happens based on the 0th value
+        //  which is the actual chromosome identifier
+        let chromosomeMapList = chromosomeOptions.sort(sortAlphaNum(0)),
+            linkageMapList = linkageOptions.sort(sortAlphaNum(0));
 
         // create list of options
-        const options = chromosomeMapList.map((value, index) => {
+        const chrOptions = chromosomeMapList.map((value, index) => {
             return <option key={index} value={value[0]}>{value[0]}</option>;
-        });
+        }),
+            linkageGroupOptions = linkageMapList.map((value, index) => {
+                return <option key={index} value={value[0]}>{value[0]}</option>;
+            });
 
+        const { trackData = [] } = window.synVisio || {};
         // see if track data is available
-        const isTrackDataAvailable = _.reduce(window.synVisio.trackData, (acc, d) => (!!d || acc), false);
+        const isTrackDataAvailable = _.reduce(trackData, (acc, d) => (!!d || acc), false);
 
         return (
             <div id='filter-panel-root' className='container-fluid'>
                 <form className="filter-panel-container">
-
-                    <div className="col-sm-12">
-                        <div className="checkbox custom-checkbox">
-                            <label>
-                                <input type="checkbox" id='hideUnalignedRegions' checked={hideUnalignedRegions} onChange={this.toggleCheckboxChange} />
-                                {"Hide Unaligned Chromosomes/Scaffolds"}
-                            </label>
-                        </div>
-                    </div>
-
-                    {plotType != 'dotplot' && <div className="col-sm-12">
-                        <div className="checkbox custom-checkbox">
-                            <label>
-                                <input type="checkbox" id='markerNormalize' checked={isNormalized} onChange={this.toggleCheckboxChange} />
-                                {"Normalize Chromosome Marker Lengths"}
-                            </label>
-                        </div>
-                    </div>}
-
-
-                    {plotType != 'dotplot' && <div className="col-sm-12">
-                        <div className="checkbox custom-checkbox">
-                            <label>
-                                <input type="checkbox" id='markerScale' checked={showScale} onChange={this.toggleCheckboxChange} />
-                                {"Show Marker Scales"}
-                            </label>
-                        </div>
-                    </div>}
-
                     <div className="col-sm-12">
                         <label htmlFor="sourceChromosomes">Source Chromosomes</label>
                         <select className="sourceChromosomeSelect" multiple title="Select Chromosomes...">
-                            {options}
+                            {chrOptions}
                         </select>
 
                     </div>
                     <div className="col-sm-12">
                         <label htmlFor="targetChromosomes">Target Chromosomes</label>
                         <select className="targetChromosomeSelect" multiple title="Select Chromosomes...">
-                            {options}
+                            {chrOptions}
+                        </select>
+                    </div>
+
+                    <div className="col-sm-12">
+                        <label htmlFor="linkageChromosomes">Linkage Group Set</label>
+                        <select className="linkageChromosomeSelect" multiple title="Select Linkage IDs...">
+                            {linkageGroupOptions}
                         </select>
                     </div>
 
                     <button type="submit" className="btn btn-primary-outline" onClick={this.onSubmit}>
                         GO <span className="icon icon-cw"></span>
                     </button>
-
-                    {isTrackDataAvailable && <button type="submit" id='track-btn' className="btn btn-primary-outline" onClick={this.onToggleTrack}>
-                        Toggle Tracks
-                    </button>}
-
                 </form>
             </div>
         );

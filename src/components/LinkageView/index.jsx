@@ -40,7 +40,7 @@ class LinkageView extends Component {
         //  fit relative to the webpage width
 
         // find the widths for each marker list 
-        let widthCollection = _.map(configuration.markers, (chromosomeList, markerId) => {
+        let widthCollection = _.map(configuration.Linkagemarkers, (chromosomeList, markerId) => {
             // for each list we calculate the sum of all the widths of chromosomes in it 
             return { markerId: markerId, width: _.sumBy(chromosomeList, (key) => chromosomeCollection.get(key).width) };
         })
@@ -53,7 +53,7 @@ class LinkageView extends Component {
 
         // no we initialise the markers and set the width directly on the markers lists directly 
         let markers = {};
-        _.each(configuration.markers, (chromosomeList, markerId) => {
+        _.each(configuration.Linkagemarkers, (chromosomeList, markerId) => {
 
             if (isNormalized) {
                 // find the marker list that has the maximum width
@@ -151,6 +151,7 @@ class LinkageView extends Component {
 
             let trackPositions = {}, trackValue;
 
+
             _.each(moddedMarkerPositions, (markerList, markerListId) => {
 
                 let yShifter = (50 * (trackIndex + 1)),
@@ -158,7 +159,7 @@ class LinkageView extends Component {
                     interScaleShifter = showScale ? 50 + interTrackGap : 20 + interTrackGap,
                     multiplier = markerListId == 'source' ? -1 * (yShifter + interScaleShifter) : (yShifter - 50 + interScaleShifter);
                 _.each(markerList, (marker) => {
-                    let tracksPerMarker = _.map(singleTrackData.chromosomeMap[marker.key], (trackDataFragment) => {
+                    let tracksPerMarker = _.map(singleTrackData.newMap[marker.key], (trackDataFragment) => {
                         trackValue = (trackDataFragment.value - singleTrackData.min) / (singleTrackData.max - singleTrackData.min);
                         return {
                             x: ((trackDataFragment.start / marker.data.width) * marker.dx) + marker.x,
@@ -192,7 +193,9 @@ class LinkageView extends Component {
             additionalTrackHeight = trackData.length * 140;
 
 
-        configuration.markers = { 'source': ['lc1', 'lc5', 'lc2', 'lc3', 'lc4', 'lc6', 'lc7'], 'target': ['LG1', 'LG5', 'LG2', 'LG3', 'LG4', 'LG6', 'LG7'] };
+        const { target = [], linkage = [] } = configuration.markers;
+
+        configuration.Linkagemarkers = { 'source': [...target], 'target': [...linkage] };
 
         configuration.isNormalized = true;
 
@@ -208,9 +211,6 @@ class LinkageView extends Component {
             hetMin = _.minBy(linkageData, (d) => +d.het).het,
             distMax = trackData[0].max,
             distMin = trackData[0].min;
-
-        console.log(hetMax, hetMin)
-        console.log(distMax, distMin)
 
         return (
             <div className='genomeViewRoot' style={{ marginTop: '-35px' }}>

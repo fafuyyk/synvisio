@@ -1,33 +1,18 @@
-#information-root {
-    h4.sub-info {
-        text-transform: capitalize;
-        margin-bottom: 7px;
-        margin-top: 7px;
+.filter-panel-container {
+    label {
+        padding: 0px 15px 15px 0px;
     }
-    svg {
-        background: #252830;
+    #track-btn {
+        margin-left: 10px;
     }
-    .pieText {
-        fill: white;
-        font-size: 18px;
-        font-weight: bold;
+    .btn-primary-outline {
+        margin-top: 10px;
     }
-    .filter-panel-container {
+    .checkbox {
+        display: inline-block;
+        margin: -5px;
         label {
-            padding: 0px 15px 15px 0px;
-        }
-        #track-btn {
-            margin-left: 10px;
-        }
-        .btn-primary-outline {
-            margin-top: 10px;
-        }
-        .checkbox {
-            display: inline-block;
-            margin: -5px;
-            label {
-                font-weight: bold;
-            }
+            font-weight: bold;
         }
     }
 }
