@@ -70,11 +70,11 @@ export default (plotType = 'dashboard') => {
 
         configuration = {
             'genomeView': {
-                'height': 0.35 * height,
+                'height': 0.5 * height,
                 'width': width,
                 'verticalPositions': {
                     'source': 45,
-                    'target': (0.35 * height) - 45
+                    'target': (0.5 * height) - 45
                 }
             },
             'dotView': {
