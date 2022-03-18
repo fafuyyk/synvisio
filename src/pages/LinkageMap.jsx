@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getGenomicsData } from '../utils/fetchData';
-import { Loader, LinkageView, GenomeView, AdvancedFilterPanel, FilterPanel, PlotCharacteristics } from '../components';
+import { Loader, LinkageView, GenomeView, AdvancedFilterPanel, FilterPanel, DownloadSvg, SaveModal, PlotCharacteristics } from '../components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { configureSourceID, setLoaderState, setGenomicData, setALignmentList, setConfiguration } from '../redux/actions/actions';
@@ -43,7 +43,7 @@ class LinkageMap extends Component {
 
     render() {
 
-        let { loaderState, configuration, genome = {}, sourceID, multiLevel, plotType, multiLevelType } = this.props,
+        let { loaderState, configuration, genome = {}, isModalVisible, sourceID, multiLevel, plotType, multiLevelType } = this.props,
             { alignmentList = [], linkageList = [] } = configuration;
 
         // transfer the colormap from genome to configuration
@@ -51,7 +51,9 @@ class LinkageMap extends Component {
 
         return (
             <div className='dashboard-root m-t'>
+                {isModalVisible && <SaveModal />}
                 <div>
+                    <DownloadSvg />
                     <PlotCharacteristics
                         multiLevel={multiLevel}
                         multiLevelType={multiLevelType}

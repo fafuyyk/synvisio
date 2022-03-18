@@ -17,8 +17,7 @@ class Modal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedIndex: 0,
-            selectedType: 'PNG',
+            selectedType: 'SVG',
             loaderON: false,
             exportScale: 1
         };
@@ -41,32 +40,65 @@ class Modal extends Component {
         // toggle loader ON
         this.setState({ loaderON: true });
 
-        const { selectedIndex, selectedType, exportScale = 1 } = this.state;
+        const { selectedType, exportScale = 1 } = this.state;
 
-        let svgSelector = document.getElementsByClassName('exportable-svg')[selectedIndex];
+        let svgSelector = document.getElementsByClassName('exportable-svg');
 
         toastr["info"]("Thanks for using SynVisio, Please consider citing our work if you are using the images in a publication. The citation can be found on the home page. Please wait for the download to begin...", "Export");
 
-        ParseSVG(svgSelector).then((svgEl) => {
-            const fileName = "synvisio-export-" + selectedType + "-" + uniqid() + (selectedType == "SVG" ? '.svg' : '.png');
-            if (selectedType == 'SVG') {
-                let xmls = new XMLSerializer();
-                var xmlStr = xmls.serializeToString(svgEl);
-                xmlStr = xmlStr.split("xmlns=\"http://www.w3.org/1999/xhtml\"").join("");
-                var blob = new Blob([xmlStr], { type: "image/svg+xml" });
-                saveAs(blob, fileName);
-            }
-            else {
-                svgSaver.saveSvgAsPng(svgEl, fileName, { 'scale': exportScale });
-            }
-        }).finally(() => this.setState({ 'loaderON': false }))
 
+        const chartHeightShift = +jQuery('.genomeViewSVG').attr('height') - 35;
+        // Move the legends closer to the end and then reset them after the download 
+        let firstLegendTransformValues = jQuery('.legendSequential').attr('transform').slice(10, -1).split(','),
+            secondLegendTransformValues = jQuery('.legendSequentialDIS').attr('transform').slice(10, -1).split(',');
+
+        jQuery('.legendSequential').attr('transform', 'translate(' + firstLegendTransformValues[0] + "," + (+firstLegendTransformValues[1] + chartHeightShift) + ")");
+        jQuery('.legendSequentialDIS').attr('transform', 'translate(' + secondLegendTransformValues[0] + "," + (+secondLegendTransformValues[1] + chartHeightShift) + ")");
+
+        Promise.all([ParseSVG(svgSelector[0]), ParseSVG(svgSelector[1])]).then(([syntenyPlot, LinkagePlot]) => {
+
+            const fileName = "synvisio-export-" + selectedType + "-" + uniqid() + (selectedType == "SVG" ? '.svg' : '.png');
+
+            let syntenyXML = (new XMLSerializer()).serializeToString(syntenyPlot).split("xmlns=\"http://www.w3.org/1999/xhtml\"").join(""),
+                linkageXML = (new XMLSerializer()).serializeToString(LinkagePlot).split("xmlns=\"http://www.w3.org/1999/xhtml\"").join("");
+
+
+            const syntenyChartHeight = +syntenyXML.slice(syntenyXML.indexOf('height=') + 8, syntenyXML.indexOf('" style=')),
+                syntenyChart = syntenyXML.slice(syntenyXML.indexOf('<g'), syntenyXML.indexOf('</svg>'));
+
+            let linkageChartPartOne = linkageXML.slice(0, linkageXML.indexOf('<g>')),
+                // we remove one <g> tag and replace it with our own one with transform prop in it   
+                linkageChartPartTwo = linkageXML.slice(linkageXML.indexOf('<g>') + 3);
+
+            // First increase the height on the linkage chart as it will be the final output
+            let updatedLinkageChartPartOne = linkageChartPartOne.slice(0, linkageChartPartOne.indexOf('height=') + 7) + '"' + syntenyChartHeight * 2.25 + '"' + linkageChartPartOne.slice(linkageChartPartOne.indexOf('" style') + 1);
+
+
+            updatedLinkageChartPartOne = updatedLinkageChartPartOne.split(".genomeViewRoot").join('').split('</style>').join("  .genomeViewSVG .link-polygon { stroke: none; fill-opacity: 0.6; pointer-events: none; } </style>");
+
+
+
+
+
+
+            let finalChart = updatedLinkageChartPartOne + syntenyChart + "<g transform='translate(0," + (syntenyChartHeight - 35) + ")'>" + linkageChartPartTwo;
+
+            var blob = new Blob([finalChart], { type: "image/svg+xml" });
+            saveAs(blob, fileName);
+
+
+            jQuery('.legendSequential').attr('transform', 'translate(' + firstLegendTransformValues[0] + "," + (+firstLegendTransformValues[1]) + ")");
+            jQuery('.legendSequentialDIS').attr('transform', 'translate(' + secondLegendTransformValues[0] + "," + (+secondLegendTransformValues[1]) + ")");
+
+
+            this.setState({ 'loaderON': false });
+        });
     }
 
 
     render() {
 
-        const { selectedIndex, selectedType, exportScale, loaderON } = this.state,
+        const { selectedType, exportScale, loaderON } = this.state,
             exportable_elements = _.map(document.getElementsByClassName('exportable-svg'), (element) => element.id);
 
         return (
@@ -79,35 +111,8 @@ class Modal extends Component {
                     <div className='info-panel-inner text-center'>
                         {exportable_elements.length > 0 ?
                             <div className='m-a'>
-                                <div className='select-wrapper'>
-                                    <p className='select-label'> Select Graphic</p>
-                                    <select onChange={this.selectChange} id={'selectedIndex'} value={selectedIndex} className='plot-options form-control'>
-                                        {_.map(exportable_elements, (elementId, elementIndex) =>
-                                            <option key={'option-' + elementIndex} value={elementIndex}>{elementId.split('-').join(" ").toLocaleUpperCase()}</option>)}
-                                    </select>
-                                </div>
-                                <div className='select-wrapper'>
-                                    <p className='select-label'>Select Export Type</p>
-                                    <select onChange={this.selectChange} id={'selectedType'} value={selectedType} className='type-options form-control'>
-                                        <option value='PNG'>PNG</option>
-                                        <option value='SVG'>SVG</option>
-                                    </select>
-                                </div>
-                                <p className='text-warning text-left info-p'> Select a higher scale if you want a high resolution image</p>
-                                <div className='select-wrapper'>
-                                    <p className='select-label'>Select Export Scale</p>
-                                    <select onChange={this.selectChange} id={'exportScale'} value={exportScale} className='type-options form-control'>
-                                        <option value='1'>1 - Regular</option>
-                                        <option value='2'>2x</option>
-                                        <option value='10'>10x</option>
-                                    </select>
-                                </div>
-
-                                <p className='text-warning text-left info-p'> If you prefer a white background for your exported images,</p>
-                                <p className='text-warning text-left info-p m-t-0'>switch it using the theme toggler present at the top of the page.</p>
                                 <p className='text-warning text-left info-p'>Please consider citing our work if you are using the images in a publication.</p>
                                 <p className='text-warning text-left info-p m-t-0'>The citation can be found on the home page.</p>
-
                                 <div>
                                     <button className="btn btn-primary-outline" onClick={this.downloadImage}>
                                         DOWNLOAD
