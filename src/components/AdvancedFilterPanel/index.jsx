@@ -87,7 +87,7 @@ class AdvancedFilterPanel extends Component {
                     <div className='advanced-info-box'>
                         <p><b>Select</b> the required Chromosomes and Click <b>GO</b> above before editing the layout here.</p>
                         <p><b>Drag</b> the chromosomes around to rearrange their order.</p>
-                      
+
                     </div>
                     {_.map(markers, (markerList, markerId) => {
                         return <div key={'markerID-' + markerId} className='marker-wrapper'>

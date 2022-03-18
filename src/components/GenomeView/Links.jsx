@@ -136,10 +136,8 @@ class Links extends Component {
             let fill, style;
             // Decide on stroke colour
             let sourceIndex = configuration.markers.source.indexOf(d.alignment.source);
-
             // If a color is present in the color map use it if not default to d3 color
             let colorPaletteMap = isColorMapAvailable ? (colorMap[d.alignment.source] || '#1f77b4') : schemeCategory10[sourceIndex % 10];
-
 
             fill = (sourceIndex == -1) ? '#808080' : colorPaletteMap;
 

@@ -145,15 +145,6 @@ class GenomeView extends Component {
                     // pick the one with the smaller width and ensure the minimum is 2px
                     linkWidth = Math.max(sourceGeneWidth, targetGeneWidth, 2);
 
-                if (sourceID == 'ancestor-source') {
-                    if (sourceGeneWidth == 0) {
-                        sourceGeneWidth = sourceMarker.dx;
-                    }
-                    if (targetGeneWidth == 0) {
-                        targetGeneWidth = targetMarker.dx;
-                    }
-                }
-
 
                 let source, target;
                 if (sourceMarker.reversed) {

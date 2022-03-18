@@ -42,7 +42,7 @@ class Markers extends Component {
                     stroke = 'rgb(0,0,0,0)';
                 }
 
-                if(d.key.indexOf('LG')>-1){
+                if (d.key.indexOf('LG') > -1) {
                     stroke = 'rgb(230 125 126)';
                 }
 
@@ -75,7 +75,11 @@ class Markers extends Component {
                 else return <path key={'arrow' + i} />;
             });
 
-            markerElements.push(reversedArrows);
+            // only show reversal on bottom linkage markers
+            if (markerListId == 'target') {
+                markerElements.push(reversedArrows);
+            }
+
 
             // create marker text units
             let markerTextUnits = markerList.map((d, i) => {

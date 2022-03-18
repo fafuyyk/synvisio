@@ -68,13 +68,15 @@ export default (plotType = 'dashboard') => {
         }
     } else {
 
+        let maxHeight = Math.min(0.5 * height, 450);
+
         configuration = {
             'genomeView': {
-                'height': 0.5 * height,
+                'height': maxHeight,
                 'width': width,
                 'verticalPositions': {
                     'source': 45,
-                    'target': (0.5 * height) - 45
+                    'target': (maxHeight) - 45
                 }
             },
             'dotView': {

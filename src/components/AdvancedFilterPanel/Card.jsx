@@ -54,8 +54,7 @@ const Card = ({ id, text, index, moveCard, reverseCard, isCardReversed = false }
   const opacity = isDragging ? 0 : 1
   drag(drop(ref))
   return (
-    // disable reversing marking
-    <div 
+    <div onDoubleClick={reverseCard}
       ref={ref}
       className='dragBox'
       style={{ opacity, 'background': (isCardReversed ? '#e64759' : '#2177b4') }}>

@@ -27,7 +27,6 @@ class LinkageView extends Component {
 
         const { isNormalized = false, reversedMarkers } = configuration;
 
-
         let verticalPositions = { ...configuration.genomeView.verticalPositions };
 
         verticalPositions['source'] = 0;
@@ -64,7 +63,7 @@ class LinkageView extends Component {
             // the remaining width is 20% for the maximum width marker list but will change for others
             let remainingWidth = (maxWidthAvailable - (_.find(widthCollection, (o) => o.markerId == markerId).width * scaleFactor)),
                 markerPadding = remainingWidth / (chromosomeList.length),
-                reversedMarkerList = reversedMarkers[markerId],
+                reversedMarkerList = reversedMarkers[markerId == 'target' ? 'linkage' : 'target'],
                 widthUsedSoFar = 0,
                 markerList = _.map(chromosomeList, (key) => {
                     let marker = {
@@ -99,7 +98,6 @@ class LinkageView extends Component {
                 .domain([_.min(hetScores), _.max(hetScores)])
                 .range([0.3, 0.8]);
 
-
             let sourceChromosome = chromosomeMap.get(alignment.locus),
                 targetChromosome = chromosomeMap.get(alignment.linkageID);
 
@@ -113,20 +111,54 @@ class LinkageView extends Component {
                 // pick the one with the smaller width and ensure the minimum is 2px
                 linkWidth = Math.max(sourceGeneWidth, targetGeneWidth, 2);
 
-
             let source, target;
 
-            source = {
-                'x': sourceMarker.x + sourceX,
-                'y': sourceMarker.y,
-                'x1': sourceMarker.x + sourceX + sourceGeneWidth
+            if (sourceMarker.reversed) {
+                source = {
+                    'x': sourceMarker.x + sourceMarker.dx - sourceX,
+                    'y': sourceMarker.y,
+                    'x1': sourceMarker.x + sourceMarker.dx - (sourceX + sourceGeneWidth)
+                }
+            }
+            else {
+                source = {
+                    'x': sourceMarker.x + sourceX,
+                    'y': sourceMarker.y,
+                    'x1': sourceMarker.x + sourceX + sourceGeneWidth
+                }
+
             }
 
-            target = {
-                'x': targetMarker.x + targetX,
-                'y': targetMarker.y - 10,
-                'x1': targetMarker.x + targetX + targetGeneWidth
+            if (targetMarker.reversed) {
+                target = {
+                    'x': targetMarker.x + targetMarker.dx - targetX,
+                    'y': targetMarker.y - 10,
+                    'x1': targetMarker.x + targetMarker.dx - (targetX + targetGeneWidth)
+                }
             }
+            else {
+                target = {
+                    'x': targetMarker.x + targetX,
+                    'y': targetMarker.y - 10,
+                    'x1': targetMarker.x + targetX + targetGeneWidth
+                }
+            }
+
+
+
+            // // code block to straighten links out if they are reversed
+            // // when a marker is flipped the links are reversed too and this code block can
+            // // straighten them out
+            // if (targetMarker.reversed && (target.x > target.x1)) {
+            //     let tempStore = target.x1;
+            //     target.x1 = target.x;
+            //     target.x = tempStore;
+            // }
+            // if (sourceMarker.reversed && (source.x > source.x1)) {
+            //     let tempStore = source.x1;
+            //     source.x1 = source.x;
+            //     source.x = tempStore;
+            // }
 
             // the marker height is 10 px so we add and reduce that to the y postion for top and bottom
             linkList.push({
@@ -158,12 +190,18 @@ class LinkageView extends Component {
                     interTrackGap = 20 * (trackIndex),
                     interScaleShifter = showScale ? 50 + interTrackGap : 20 + interTrackGap,
                     multiplier = markerListId == 'source' ? -1 * (yShifter + interScaleShifter) : (yShifter - 50 + interScaleShifter);
+
                 _.each(markerList, (marker) => {
+
                     let tracksPerMarker = _.map(singleTrackData.newMap[marker.key], (trackDataFragment) => {
                         trackValue = (trackDataFragment.value - singleTrackData.min) / (singleTrackData.max - singleTrackData.min);
+
+                        let x = ((trackDataFragment.start / marker.data.width) * marker.dx) + marker.x;
+                        if (marker.reversed)
+                            x = marker.x + marker.dx - ((trackDataFragment.start / marker.data.width) * marker.dx);
                         return {
-                            x: ((trackDataFragment.start / marker.data.width) * marker.dx) + marker.x,
-                            dx: ((trackDataFragment.end - trackDataFragment.start) / marker.data.width) * marker.dx,
+                            x,
+                            dx: 0,
                             dy: (trackType[trackIndex].type == 'track-heatmap') ? 50 : 50 * trackValue,
                             y: marker.y + (multiplier) + ((trackType[trackIndex].type == 'track-heatmap') ? 0 : (50 * (1 - trackValue))),
                             value: trackValue,
@@ -171,6 +209,7 @@ class LinkageView extends Component {
                         }
                     });
                     trackPositions[marker.key + '-' + markerListId] = tracksPerMarker;
+
                 });
             });
             return trackPositions;
